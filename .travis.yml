@@ -29,6 +29,11 @@ env:
     BUILD_WITH_OPENSSL_SRC='TRUE'
     OPENSSL_SRC_VERSION='1.1.1f'
   - NGINX_SRC_MAJOR=1
+    NGINX_SRC_MINOR=17
+    NGINX_SRC_PATCH=10
+    OPENSSL_SRC_VERSION='1.1.1f'
+    BUILD_WITH_MRUBY_MASTER='TRUE'
+  - NGINX_SRC_MAJOR=1
     NGINX_SRC_MINOR=18
     NGINX_SRC_PATCH=0
     OPENSSL_SRC_VERSION='1.1.1f'
@@ -88,6 +93,7 @@ script:
   - echo "NGINX_SRC_PATCH=${NGINX_SRC_PATCH}" >> nginx_version
   - echo "NGINX_SRC_VER=nginx-${NGINX_SRC_MAJOR}.${NGINX_SRC_MINOR}.${NGINX_SRC_PATCH}" >> nginx_version
   - if [ "${BUILD_WITH_OPENSSL_SRC}" == "TRUE" ]; then build_opts="--with-openssl-src=${PWD}/openssl-${OPENSSL_SRC_VERSION}"; fi
+  - if [ "${BUILD_WITH_MRUBY_MASTER}" == "TRUE" ]; then echo y | ./update-mruby-subtree; fi
   - sh test.sh ${build_opts}
 
 after_failure:

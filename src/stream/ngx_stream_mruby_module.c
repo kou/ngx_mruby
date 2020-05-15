@@ -406,7 +406,7 @@ static ngx_int_t ngx_stream_mrb_run_cycle(ngx_cycle_t *cycle, mrb_state *mrb, ng
 {
   mrb_int ai = mrb_gc_arena_save(mrb);
 
-  mrb_run(mrb, code->proc, mrb_top_self(mrb));
+  mrb_top_run(mrb, code->proc, mrb_top_self(mrb), 0);
   if (mrb->exc) {
     ngx_stream_mrb_raise_cycle_error(mrb, mrb_obj_value(mrb->exc), cycle);
     mrb_gc_arena_restore(mrb, ai);
@@ -606,7 +606,7 @@ static char *ngx_stream_mruby_server_context_code(ngx_conf_t *cf, ngx_command_t 
 
   tmp_ud = mrb->ud;
   mrb->ud = mscf;
-  mrb_run(mrb, code->proc, mrb_top_self(mrb));
+  mrb_top_run(mrb, code->proc, mrb_top_self(mrb), 0);
   mrb->ud = tmp_ud;
 
   if (mrb->exc) {
@@ -666,7 +666,7 @@ static ngx_int_t ngx_stream_mrb_run_conf(ngx_conf_t *cf, mrb_state *mrb, ngx_mrb
   int ai = mrb_gc_arena_save(mrb);
 
   ngx_log_error(NGX_LOG_INFO, cf->log, 0, "%s INFO %s:%d: mrb_run", MODULE_NAME, __func__, __LINE__);
-  mrb_run(mrb, code->proc, mrb_top_self(mrb));
+  mrb_top_run(mrb, code->proc, mrb_top_self(mrb), 0);
   if (mrb->exc) {
     ngx_stream_mrb_raise_conf_error(mrb, mrb_obj_value(mrb->exc), cf);
     mrb_gc_arena_restore(mrb, ai);
